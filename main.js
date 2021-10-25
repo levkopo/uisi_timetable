@@ -1,4 +1,4 @@
-const names = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"]
+const names = ["Сегодня", "Завтра", "Послезавтра"]
 let baseTable = null
 
 // VK Bridge Init
@@ -24,7 +24,10 @@ window.onload = () => {
 
             let activeTab = 1
             const onUpdate = () => {
-                loadTable(new Date(), activeTab)
+                let date = new Date()
+                date.setDate(date.getDate() + activeTab-new Date().getDay())
+
+                loadTable(date, activeTab)
             }
 
             const openTab = (tab) => {
@@ -41,7 +44,7 @@ window.onload = () => {
                 tab.classList.add("selectable")
                 tab.innerText = names[i]
                 tab.onclick = () => {
-                    openTab(parseInt(i)+1)
+                    openTab(new Date().getDay()+parseInt(i))
                 }
 
                 tabs.append(tab)
