@@ -21,7 +21,7 @@ body {
     transition: all 0.4s ease;
 }
 
-body[theme="dark"]{
+body[scheme="vkcom_dark"], [scheme="vkcom_dark"]{
     background: #000000de;
     --mdc-theme-primary: #fff;
     --cardColor: #ffffff1a;
@@ -29,12 +29,12 @@ body[theme="dark"]{
     --activeGray: #FFFFFF60;
 }
 
-body[theme="dark"], :root {
+body[scheme="vkcom_dark"], [scheme="vkcom_dark"], :root {
     --mdc-theme-surface: #363636;
     --mdc-theme-on-surface: #fff;
 }
 
-body[theme="dark"] {
+body[scheme="vkcom_dark"], [scheme="vkcom_dark"] {
     color: #fff;
 }
 
@@ -51,11 +51,11 @@ pre {
     color: cornflowerblue;
 }
 
-body[theme="dark"] .hljs-keyword {
+body[scheme="vkcom_dark"] .hljs-keyword {
     color: darkorange;
 }
 
-body[theme="dark"] .hljs-string {
+body[scheme="vkcom_dark"] .hljs-string {
     color: green;
 }
 

@@ -1,40 +1,6 @@
 const names = ["Сегодня", "Завтра", "Послезавтра"]
 let baseTable = null
 
-const setTheme = (theme) => {
-    document.body.setAttribute('theme', theme);
-    createCookie('theme', theme);
-};
-
-const changeTheme = () => {
-    if(document.body.attributes['theme'].value==="dark") {
-        setTheme('light')
-    }else{
-        setTheme('dark')
-    }
-};
-
-const createCookie = (name, value, days) => {
-    let expires;
-
-    if (days) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toGMTString();
-    } else {
-        expires = "";
-    }
-    document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
-};
-
-const getCookie = (name) => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-
-    return null
-};
-
 window.onload = () => {
     // VK Bridge Init
     if(typeof window['androidBridge'] != "undefined"){
@@ -42,11 +8,6 @@ window.onload = () => {
     }else if(typeof window['iosBridge'] != "undefined"){
         window['iosBridge']['VKWebAppInit'].postMessage({})
     }
-
-    document.body.setAttribute("theme", getCookie("theme")||"light");
-    document.getElementById("theme").addEventListener('click', () => {
-        changeTheme();
-    });
 
     const days = document.getElementById("days")
     fetch("./timetable.json")
