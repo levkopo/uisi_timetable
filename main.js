@@ -110,7 +110,6 @@ function loadTable(date, day) {
                         let endDate = typeof lesson['end']== "boolean"?
                             date : toISODate(lesson['end'])
 
-                        debugger
                         if(endDate.getTime()>=date.getTime()){
                             formedTable[lesson.index-1] = lesson
                         }
