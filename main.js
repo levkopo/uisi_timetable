@@ -25,6 +25,7 @@ window.onload = () => {
             let activeTab = 1
             const onUpdate = () => {
                 let date = new Date()
+                date.setHours(0, 0, 0, 0)
                 date.setDate(date.getDate() + activeTab-new Date().getDay())
 
                 loadTable(date, activeTab)
@@ -109,6 +110,7 @@ function loadTable(date, day) {
                         let endDate = typeof lesson['end']== "boolean"?
                             date : toISODate(lesson['end'])
 
+                        debugger
                         if(endDate.getTime()>=date.getTime()){
                             formedTable[lesson.index-1] = lesson
                         }
