@@ -36,6 +36,13 @@ const getCookie = (name) => {
 };
 
 window.onload = () => {
+    // VK Bridge Init 
+    if(typeof window['androidBridge'] != "undefined"){
+        window['androidBridge']['VKWebAppInit']()
+    }else if(typeof window['iosBridge'] != "undefined"){
+        window['iosBridge']['VKWebAppInit'].postMessage({})
+    }
+
     document.body.setAttribute("theme", getCookie("theme")||"light");
     document.getElementById("theme").addEventListener('click', () => {
         changeTheme();
