@@ -3,9 +3,9 @@ let baseTable = null
 
 // VK Bridge Init
 if(typeof window['AndroidBridge'] != "undefined"){
-    window['AndroidBridge']['VKWebAppInit']()
-}else if(typeof window['iosBridge'] != "undefined"){
-    window['iosBridge']['VKWebAppInit'].postMessage({})
+    window['AndroidBridge']['VKWebAppInit']("{}")
+}else if(typeof window['webkit'] != "undefined"){
+    window['webkit']['messageHandlers']['VKWebAppInit'].postMessage({})
 }
 
 window.onload = () => {
