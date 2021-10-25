@@ -1,14 +1,14 @@
 const names = ["Сегодня", "Завтра", "Послезавтра"]
 let baseTable = null
 
-window.onload = () => {
-    // VK Bridge Init
-    if(typeof window['androidBridge'] != "undefined"){
-        window['androidBridge']['VKWebAppInit']()
-    }else if(typeof window['iosBridge'] != "undefined"){
-        window['iosBridge']['VKWebAppInit'].postMessage({})
-    }
+// VK Bridge Init
+if(typeof window['AndroidBridge'] != "undefined"){
+    window['AndroidBridge']['VKWebAppInit']()
+}else if(typeof window['iosBridge'] != "undefined"){
+    window['iosBridge']['VKWebAppInit'].postMessage({})
+}
 
+window.onload = () => {
     const days = document.getElementById("days")
     fetch("./timetable.json")
         .then(r => r.json())
