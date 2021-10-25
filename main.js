@@ -1,33 +1,54 @@
-const names = ["Сегодня", "Завтра", "Послезавтра"]
+const names = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"]
 let baseTable = null
 
 // VK Bridge Init
 if(typeof window['AndroidBridge'] != "undefined"){
     window['AndroidBridge']['VKWebAppInit']("{}")
-}else if(typeof window['webkit'] != "undefined"){
+}else if(typeof window['webkit'] != "undefined"&&
+    typeof window['webkit']['messageHandlers'] != "undefined"){
     window['webkit']['messageHandlers']['VKWebAppInit'].postMessage({})
+}else{
+    parent.postMessage({
+        handler: "VKWebAppInit",
+        params: {},
+        type: 'vk-connect'
+    }, '*')
 }
 
 window.onload = () => {
-    const days = document.getElementById("days")
+    const tabs = document.getElementById("days")
     fetch("./timetable.json")
         .then(r => r.json())
         .then(r => {
             baseTable = r
 
-            const nowDay = new Date().getDay()
-            for (let i = 0; i < 3; i++) {
-                const day = document.createElement("div")
-                day.className = "tab"
-                day.classList.add("selectable")
-                day.innerText = names[i]
-                day.onclick = () => loadTable(new Date(new Date().getTime() +
-                    24 * 60 * 60 * 1000), nowDay+i)
-
-                days.append(day)
+            let activeTab = 1
+            const onUpdate = () => {
+                loadTable(new Date(), activeTab)
             }
 
-            loadTable(new Date(), nowDay)
+            const openTab = (tab) => {
+                tabs.children[activeTab-1].removeAttribute("active")
+                activeTab = tab
+
+                tabs.children[activeTab-1].setAttribute("active", "true")
+                onUpdate()
+            }
+
+            for (let i in names) {
+                const tab = document.createElement("div")
+                tab.className = "tab"
+                tab.classList.add("selectable")
+                tab.innerText = names[i]
+                tab.onclick = () => {
+                    openTab(parseInt(i)+1)
+                }
+
+                tabs.append(tab)
+            }
+
+
+            openTab(new Date().getDay())
         })
         .catch(alert)
 }
@@ -40,7 +61,7 @@ function loadTable(date, day) {
     for(let i in baseTable.timeline) {
         const iTimeline = baseTable.timeline[i]
         if(typeof iTimeline.for !== "undefined"){
-            if(iTimeline.for===day.toString()){
+            if(iTimeline.for===day){
                 timetable = iTimeline
                 break
             }
@@ -77,16 +98,18 @@ function loadTable(date, day) {
                         formedTable[lesson.index-1] = lesson
                 })
             }else if(
-                typeof lesson['start'] != "undefined" &&
-                typeof lesson['end'] != "undefined"
+                typeof lesson['start'] != "undefined"
             ) {
                 let startDate = toISODate(lesson['start'])
-                let endDate = typeof lesson['end']== "boolean"?
-                    lesson['end'] : toISODate(lesson['end'])
+                if(startDate.getTime()<=date.getTime()) {
+                    if(typeof lesson['end'] != "undefined"){
+                        let endDate = typeof lesson['end']== "boolean"?
+                            date : toISODate(lesson['end'])
 
-                if(startDate.getTime()<=date.getTime()&&
-                    endDate.getTime()>=date.getTime()) {
-                    formedTable[lesson.index-1] = lesson
+                        if(endDate.getTime()>=date.getTime()){
+                            formedTable[lesson.index-1] = lesson
+                        }
+                    }else formedTable[lesson.index-1] = lesson
                 }
             }
         }
@@ -104,6 +127,10 @@ function loadTable(date, day) {
         }else lessonContainer.innerText = "Пары нет"
 
         mainTableContainer.append(lessonContainer)
+    }
+
+    if(formedTable.length===0){
+        mainTableContainer.innerText = "Пар нет"
     }
 
     tableContainer.append(mainTableContainer)

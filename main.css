@@ -70,7 +70,7 @@ body[scheme="vkcom_dark"] .hljs-string {
 }
 
 .content {
-    margin: 3vmin;
+    margin: 0 28px 28px;
 }
 
 .title {
@@ -108,6 +108,11 @@ p {
     color: var(--activeGray)
 }
 
+.tab[active], .tab:hover {
+    border-radius: 4px;
+    background: #00000020;
+}
+
 .card-body {
     padding: 16px;
 }
@@ -137,32 +142,31 @@ footer {
     padding: 3vH;
 }
 
-.toolbar {
-    height: 8vh;
-    line-height: 8vh;
-    padding-left: 15px;
-    font-weight: normal;
-    box-shadow: #000000D5 0 0 6px 0;
-    z-index: 5;
-}
-
-.selectable:hover {
-    background: rgba(0, 0, 0, 0.25);
-}
-
 .lesson {
     padding: 10px;
 }
 
 .tabs {
-    margin-top: 6px;
-    flex-direction: row;
+    flex-direction: column;
     display: flex;
     z-index: 10;
 }
 
+@media (min-width: 600px) {
+    .tabs {
+        flex-direction: row;
+    }
+
+    .tab {
+        margin-top: 0;
+        margin-left: 5px;
+    }
+
+}
+
 .tab {
-    padding: 16px;
+    padding: 8px;
+    margin-top: 5px;
     font-weight: normal;
 }
 
