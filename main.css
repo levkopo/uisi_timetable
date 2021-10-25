@@ -73,6 +73,11 @@ body[scheme="vkcom_dark"] .hljs-string {
     margin: 0 28px 28px;
 }
 
+.lessonDesc {
+    margin-top: 5px;
+    margin-left: 15px;
+}
+
 .title {
     font-weight: bold;
     margin-top: 3vMin;

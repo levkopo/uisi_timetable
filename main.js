@@ -61,31 +61,18 @@ function loadTable(date, day) {
     const tableContainer = document.getElementById("table")
     const table = baseTable.table[day]
 
-    let timetable = baseTable.timeline[baseTable.timeline.length-1]
+    let timetable = baseTable.timeline[baseTable.timeline.length-1].table
     for(let i in baseTable.timeline) {
         const iTimeline = baseTable.timeline[i]
         if(typeof iTimeline.for !== "undefined"){
             if(iTimeline.for===day){
-                timetable = iTimeline
+                timetable = iTimeline.table
                 break
             }
         }
     }
 
     tableContainer.innerHTML = ""
-
-    const timetableContainer = document.createElement("div")
-    timetableContainer.classList.add("mdc-card", "card-body")
-
-    for(let i in timetable.table){
-        const tableContainer = document.createElement("div")
-        const table = timetable.table[i]
-
-        tableContainer.innerText = (parseInt(i)+1) + " пара: " + table.start + " - " + table.end
-        timetableContainer.append(tableContainer)
-    }
-
-    tableContainer.append(timetableContainer)
 
     const formedTable = []
     const formedDate = ("0"+date.getDate()).slice(-2)
@@ -126,9 +113,16 @@ function loadTable(date, day) {
     for (let i = 0; i < formedTable.length; i++) {
         const lessonContainer = document.createElement("div")
         lessonContainer.className = "lesson"
+
+        let name = "—"
         if(typeof formedTable[i] != "undefined") {
-            lessonContainer.innerText = formedTable[i].name
-        }else lessonContainer.innerText = "Пары нет"
+            name = formedTable[i].name
+        }
+
+        lessonContainer.innerHTML = `
+                <b>`+name+`</b>
+                <div class="lessonDesc">`+timetable[i].start+" - "+timetable[i].end+`</div>
+            `
 
         mainTableContainer.append(lessonContainer)
     }
