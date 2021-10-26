@@ -1,11 +1,6 @@
 const names = ["Сегодня", "Завтра", "Послезавтра"]
 let baseTable = null
 
-let src = '//cdn.jsdelivr.net/npm/eruda';
-if (!/eruda=true/.test(window.location) && localStorage.getItem('active-eruda') != 'true') return;
-document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
-document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');
-
 // VK Bridge Init
 if(typeof window['AndroidBridge'] != "undefined"){
     window['AndroidBridge']['VKWebAppInit']("{}")
@@ -27,37 +22,38 @@ window.onload = () => {
         .then(r => {
             baseTable = r
 
-            let activeTab = 1
+            let activeTab = 0
             const onUpdate = () => {
                 let date = new Date()
                 date.setHours(0, 0, 0, 0)
-                date.setDate(date.getDate() + activeTab-new Date().getDay())
+                date.setDate(date.getDate() + activeTab)
 
-                loadTable(date, activeTab)
+                loadTable(date, date.getDay())
             }
 
             const openTab = (tab) => {
-                tabs.children[activeTab-1].removeAttribute("active")
+                console.log(tab)
+                tabs.children[activeTab].removeAttribute("active")
                 activeTab = tab
 
-                tabs.children[activeTab-1].setAttribute("active", "true")
+                tabs.children[activeTab].setAttribute("active", "true")
                 onUpdate()
             }
 
-            for (let i in names) {
+            for (const i in names) {
                 const tab = document.createElement("div")
                 tab.className = "tab"
                 tab.classList.add("selectable")
                 tab.innerText = names[i]
                 tab.onclick = () => {
-                    openTab(new Date().getDay()+parseInt(i))
+                    openTab(parseInt(i))
                 }
 
                 tabs.append(tab)
             }
 
 
-            openTab(new Date().getDay())
+            openTab(0)
         })
         .catch(alert)
 }
